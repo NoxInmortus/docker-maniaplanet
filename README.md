@@ -51,8 +51,8 @@ Volume to mount is `/home/container` (Pterodactyl compliant) and contains all Tr
 |3450/udp|Server P2P UDP port|
 |5000|XMLRPC Port|
 
-|Environment variable|Default|Usage|
-|-|-|
+|Environment variables|Default|Usage|
+|-|-|-|
 |MASTERSERVER_ACCOUNT|None||
 |MASTERSERVER_ACCOUNT_PWD|None||
 |MASTERSERVER_KEY|None|Validation key||
