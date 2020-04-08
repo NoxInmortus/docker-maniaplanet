@@ -9,8 +9,7 @@
 : ${SERVER_PORT:="2350"}
 
 # We are required to get the public ip if we don't have it in our env currently.
-if [ -z ${FORCE_IP_ADDRESS+x} ]
-then
+if [ -z ${FORCE_IP_ADDRESS+x} ]; then
    FORCE_IP_ADDRESS=`wget -4 -qO- http://ifconfig.co`
 fi
 echo "=> Going to run on forced IP: ${FORCE_IP_ADDRESS} and port: ${SERVER_PORT}"
@@ -110,26 +109,25 @@ if [ ! -f ${PROJECT_DIR}/UserData/Maps/stadium_map.Map.gbx ]; then
 fi
 
 # Download title.
-if [ -z ${TITLE_PACK_FILE+x} ]
-then
-    echo "=> Downloading newest title version with no TITLE_PACK_FILE variable"
-    wget ${TITLE_PACK_URL} -qP ./UserData/Packs/
+if [ -z ${TITLE_PACK_FILE+x} ]; then
+  echo "=> Downloading newest title version with no TITLE_PACK_FILE variable"
+  wget ${TITLE_PACK_URL} -qP ./UserData/Packs/
 else
-    echo "=> Downloading newest title version to ${TITLE_PACK_FILE}"
-    wget ${TITLE_PACK_URL} -qO ./UserData/Packs/${TITLE_PACK_FILE}
+  echo "=> Downloading newest title version to ${TITLE_PACK_FILE}"
+  wget ${TITLE_PACK_URL} -qO ./UserData/Packs/${TITLE_PACK_FILE}
+fi
+
+if [ -z ${MASTERSERVER_ACCOUNT+x} ]; then
+  echo 'MASTERSERVER_ACCOUNT variable should not be empty if it is not a LAN-only server !'
 fi
 
 # Set trap to stop the script proprely when a docker stop is executed
 trap : EXIT TERM KILL INT SIGKILL SIGTERM SIGQUIT
 
 # Start dedicated.
-echo "=> Starting server, login=${MASTERSERVER_ACCOUNT}"
-./ManiaPlanetServer $@ \
+echo "=> Starting server, login=${MASTERSERVER_ACCOUNT:-} with additional parameters : ${@:-None}"
+./ManiaPlanetServer ${@} \
     /nodaemon \
     /forceip=${FORCE_IP_ADDRESS}:${SERVER_PORT} \
-    /title=${TITLE} \
     /dedicated_cfg=${DEDICATED_CFG} \
-    /game_settings=${MATCH_SETTINGS} \
-    /login=$MASTERSERVER_ACCOUNT \
-    /password=$MASTERSERVER_ACCOUNT_PWD \
-    /servername=${SERVER_NAME} \
+    /game_settings=${MATCH_SETTINGS}

@@ -35,4 +35,4 @@ RUN apk update \
 VOLUME ${PROJECT_DIR}
 EXPOSE 2350 2350/udp 3450 3450/udp 5000
 
-CMD [ "./entrypoint.sh" ]
+ENTRYPOINT ["./entrypoint.sh"]
