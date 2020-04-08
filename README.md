@@ -117,3 +117,4 @@ Volume to mount is `/home/container` (Pterodactyl compliant) and contains all Tr
 ## Sources
 - https://github.com/PyPlanet/maniaplanet-docker
 - http://blog.zot24.com/tips-tricks-with-alpine-docker/
+- https://doc.maniaplanet.com/dedicated-server/getting-started
