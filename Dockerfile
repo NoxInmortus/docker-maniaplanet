@@ -6,8 +6,8 @@ FROM alpine:3.11
 LABEL maintainer='NoxInmortus (IMPERIUM)'
 
 ENV DEDICATED_URL="http://files.v04.maniaplanet.com/server/ManiaplanetServer_Latest.zip" \
-    HOME="/home/container" \
     USER="container" \
+    HOME="/home/container" \
     TEMPLATE_DIR="${HOME}-config" \
     LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/:/lib/" \
     GLIBC_VERSION="2.31-r0"
@@ -15,7 +15,7 @@ WORKDIR ${HOME}
 
 COPY entrypoint.sh files/ /
 
-RUN adduser -D -h /home/container container && apk update \
+RUN adduser -D -h ${HOME} ${USER} && apk update \
     && apk add --no-cache unzip wget ca-certificates dos2unix \
     && wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
     && wget -q https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
