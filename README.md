@@ -51,8 +51,8 @@ Volume to mount is `/home/container` (Pterodactyl compliant) and contains all Tr
 |3450/udp|Server P2P UDP port|
 |5000|XMLRPC Port|
 
-|Environment variable|Default|Usage|
-|-|-|
+|Environment variables|Default|Usage|
+|-|-|-|
 |MASTERSERVER_ACCOUNT|None||
 |MASTERSERVER_ACCOUNT_PWD|None||
 |MASTERSERVER_KEY|None|Validation key||
@@ -102,7 +102,7 @@ Volume to mount is `/home/container` (Pterodactyl compliant) and contains all Tr
 |USE_NAT_UPNP|None||
 |GSP_NAME|None|Game Server Provider|
 |GSP_URL|None|If you're a server hoster, you can use this to advertise your services|
-|SCRIPTCLOUD_SOURCE|nadeocloud|Specify the cloud storage mode for Titles that use it. Can be "localdebug" or "xmlrpc" or "nadeocloud" (default). "nadeocloud" will work only if the creator of the title subscribed to the cloud service|
+|SCRIPTCLOUD_SOURCE|`nadeocloud`|Specify the cloud storage mode for Titles that use it. Can be "localdebug" or "xmlrpc" or "nadeocloud" (default). "nadeocloud" will work only if the creator of the title subscribed to the cloud service|
 |BLACKLIST_URL|None||
 |GUESTLIST_FILENAME|None||
 |BLACKLIST_FILENAME|None||
