@@ -16,7 +16,7 @@ WORKDIR ${HOME}
 COPY entrypoint.sh files/ /
 
 RUN adduser -D -h ${HOME} ${USER} && apk update \
-    && apk add --no-cache unzip wget ca-certificates dos2unix \
+    && apk add --no-cache unzip wget ca-certificates \
     && wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
     && wget -q https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
     && apk add --no-cache glibc-${GLIBC_VERSION}.apk libstdc++ musl libuuid \
@@ -26,10 +26,9 @@ RUN adduser -D -h ${HOME} ${USER} && apk update \
     && mv -v /matchsettings.xml ${TEMPLATE_DIR}/matchsettings.xml \
     && mv -v /stadium_map.Map.gbx ${TEMPLATE_DIR}/stadium_map.Map.gbx \
     && mv -v /entrypoint.sh ${HOME}/entrypoint.sh \
-    && dos2unix ${HOME}/entrypoint.sh \
     && chmod +x -v ${HOME}/ManiaPlanetServer ${HOME}/entrypoint.sh \
     && chown -R container: ${HOME} \
-    && apk del unzip libstdc++ musl dos2unix \
+    && apk del unzip libstdc++ musl \
     && rm -rfv glibc-${GLIBC_VERSION}.apk *.bat *.exe *.html RemoteControlExamples \
     && rm -rfv /tmp/* /var/tmp/* /var/cache/apk/* \
     ;
