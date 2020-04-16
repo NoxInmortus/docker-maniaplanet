@@ -15,9 +15,9 @@ fi
 echo "=> Going to run on forced IP: ${FORCE_IP_ADDRESS} and port: ${SERVER_PORT}"
 
 # Copy the configuration files if not yet copied.
-mkdir -pv ${PROJECT_DIR}/UserData/Config ${PROJECT_DIR}/UserData/Packs ${PROJECT_DIR}/UserData/Maps/MatchSettings
+mkdir -pv ${WORKDIR}/UserData/Config ${WORKDIR}/UserData/Packs ${WORKDIR}/UserData/Maps/MatchSettings
 ## {{{ config.xml
-if [ ! -f ${PROJECT_DIR}/UserData/Config/config.xml ]; then
+if [ ! -f ${WORKDIR}/UserData/Config/config.xml ]; then
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <dedicated>
 	<authorization_levels>
@@ -98,14 +98,14 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 		<proxy_password>${PROXY_PWD:-}</proxy_password>
 	</system_config>
 </dedicated>
-" > ${PROJECT_DIR}/UserData/Config/config.xml
+" > ${WORKDIR}/UserData/Config/config.xml
 fi
 ## config.xml }}}
-if [ ! -f ${PROJECT_DIR}/UserData/Maps/MatchSettings/matchsettings.xml ]; then
-    cp -v ${TEMPLATE_DIR}/matchsettings.xml ${PROJECT_DIR}/UserData/Maps/MatchSettings/matchsettings.xml
+if [ ! -f ${WORKDIR}/UserData/Maps/MatchSettings/matchsettings.xml ]; then
+    cp -v ${TEMPLATE_DIR}/matchsettings.xml ${WORKDIR}/UserData/Maps/MatchSettings/matchsettings.xml
 fi
-if [ ! -f ${PROJECT_DIR}/UserData/Maps/stadium_map.Map.gbx ]; then
-    cp -v ${TEMPLATE_DIR}/stadium_map.Map.gbx ${PROJECT_DIR}/UserData/Maps/stadium_map.Map.gbx
+if [ ! -f ${WORKDIR}/UserData/Maps/stadium_map.Map.gbx ]; then
+    cp -v ${TEMPLATE_DIR}/stadium_map.Map.gbx ${WORKDIR}/UserData/Maps/stadium_map.Map.gbx
 fi
 
 # Download title.
