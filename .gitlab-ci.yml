@@ -1,0 +1,54 @@
+stages:
+  - docker_build_validate
+  - docker_build_validate_pterodactyl
+  - docker_build_push
+  - docker_build_push_pterodactyl
+
+before_script:
+  - DOCKERHUB='noxinmortus'
+
+docker_build_validate:
+  stage: docker_build_validate
+  tags:
+    - docker
+  script:
+    - export DOCKER_CLI_EXPERIMENTAL=enabled
+    - docker buildx build -t ${DOCKERHUB}/${CI_PROJECT_NAME} --platform=linux/arm,linux/arm64,linux/amd64 .
+  only:
+    - merge_requests
+
+docker_build_validate_pterodactyl:
+  stage: docker_build_validate_pterodactyl
+  tags:
+    - docker
+  script:
+    - export DOCKER_CLI_EXPERIMENTAL=enabled
+    - docker buildx build -t ${DOCKERHUB}/${CI_PROJECT_NAME}:pterodactyl --platform=linux/arm,linux/arm64,linux/amd64 pterodactyl/.
+  only:
+    - merge_requests
+
+
+docker_build_push:
+  stage: docker_build_push
+  tags:
+    - docker
+  script:
+    - VERSION=$(grep 'Version' README.md | awk -F ' ' '{ print $NF }')
+    - export DOCKER_CLI_EXPERIMENTAL=enabled
+    - echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USER} --password-stdin
+    - docker buildx build -t ${DOCKERHUB}/${CI_PROJECT_NAME}:latest -t ${DOCKERHUB}/${CI_PROJECT_NAME}:${VERSION} --platform=linux/arm,linux/arm64,linux/amd64 . --push
+  only:
+    refs:
+      - master
+
+docker_build_push_pterodactyl:
+  stage: docker_build_push_pterodactyl
+  tags:
+    - docker
+  script:
+    - export DOCKER_CLI_EXPERIMENTAL=enabled
+    - echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USER} --password-stdin
+    - docker buildx build -t ${DOCKERHUB}/${CI_PROJECT_NAME}:pterodactyl --platform=linux/arm,linux/arm64,linux/amd64 pterodactyl/. --push
+  only:
+    refs:
+      - master
