@@ -1,23 +1,23 @@
 #!/bin/sh
 
 # Make sure we use defaults everywhere.
-: ${TITLE:="TMStadium@nadeo"}
-: ${TITLE_PACK_URL:="https://v4.live.maniaplanet.com/ingame/public/titles/download/TMStadium@nadeo.Title.Pack.gbx"}
-: ${DEDICATED_CFG:="config.xml"}
-: ${MATCH_SETTINGS:="MatchSettings/matchsettings.xml"}
-: ${SERVER_NAME:="My Trackmania Server"}
-: ${SERVER_PORT:="2350"}
+: "${TITLE:='TMStadium@nadeo'}"
+: "${TITLE_PACK_URL:='https://v4.live.maniaplanet.com/ingame/public/titles/download/TMStadium@nadeo.Title.Pack.gbx'}"
+: "${DEDICATED_CFG:='config.xml'}"
+: "${MATCH_SETTINGS:='MatchSettings/matchsettings.xml'}"
+: "${SERVER_NAME:='My Trackmania Server'}"
+: "${SERVER_PORT:='2350'}"
 
 # We are required to get the public ip if we don't have it in our env currently.
 if [ -z ${FORCE_IP_ADDRESS+x} ]; then
-   FORCE_IP_ADDRESS=`wget -4 -qO- http://ifconfig.co`
+   FORCE_IP_ADDRESS=$(wget -4 -qO- http://ifconfig.co)
 fi
 echo "=> Going to run on forced IP: ${FORCE_IP_ADDRESS} and port: ${SERVER_PORT}"
 
 # Copy the configuration files if not yet copied.
-mkdir -pv ${WORKDIR}/UserData/Config ${WORKDIR}/UserData/Packs ${WORKDIR}/UserData/Maps/MatchSettings
+mkdir -pv "${WORKDIR}"/UserData/Config "${WORKDIR}"/UserData/Packs "${WORKDIR}"/UserData/Maps/MatchSettings
 ## {{{ config.xml
-if [ ! -f ${WORKDIR}/UserData/Config/config.xml ]; then
+if [ ! -f "${WORKDIR}"/UserData/Config/config.xml ]; then
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <dedicated>
 	<authorization_levels>
@@ -98,14 +98,14 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 		<proxy_password>${PROXY_PWD:-}</proxy_password>
 	</system_config>
 </dedicated>
-" > ${WORKDIR}/UserData/Config/config.xml
+" > "${WORKDIR}"/UserData/Config/config.xml
 fi
 ## config.xml }}}
-if [ ! -f ${WORKDIR}/UserData/Maps/MatchSettings/matchsettings.xml ]; then
-    cp -v ${TEMPLATE_DIR}/matchsettings.xml ${WORKDIR}/UserData/Maps/MatchSettings/matchsettings.xml
+if [ ! -f "${WORKDIR}"/UserData/Maps/MatchSettings/matchsettings.xml ]; then
+    cp -v "${TEMPLATE_DIR}"/matchsettings.xml "${WORKDIR}"/UserData/Maps/MatchSettings/matchsettings.xml
 fi
-if [ ! -f ${WORKDIR}/UserData/Maps/stadium_map.Map.gbx ]; then
-    cp -v ${TEMPLATE_DIR}/stadium_map.Map.gbx ${WORKDIR}/UserData/Maps/stadium_map.Map.gbx
+if [ ! -f "${WORKDIR}"/UserData/Maps/stadium_map.Map.gbx ]; then
+    cp -v "${TEMPLATE_DIR}"/stadium_map.Map.gbx "${WORKDIR}"/UserData/Maps/stadium_map.Map.gbx
 fi
 
 # Download title.
@@ -114,7 +114,7 @@ if [ -z ${TITLE_PACK_FILE+x} ]; then
   wget ${TITLE_PACK_URL} -qP ./UserData/Packs/
 else
   echo "=> Downloading newest title version to ${TITLE_PACK_FILE}"
-  wget ${TITLE_PACK_URL} -qO ./UserData/Packs/${TITLE_PACK_FILE}
+  wget ${TITLE_PACK_URL} -qO ./UserData/Packs/"${TITLE_PACK_FILE}"
 fi
 
 if [ -z ${MASTERSERVER_ACCOUNT+x} ]; then
@@ -122,12 +122,14 @@ if [ -z ${MASTERSERVER_ACCOUNT+x} ]; then
 fi
 
 # Set trap to stop the script proprely when a docker stop is executed
-trap : EXIT TERM KILL INT SIGKILL SIGTERM SIGQUIT
+trap : EXIT TERM INT TERM QUIT WINCH
 
 # Start dedicated.
-echo "=> Starting server, login=${MASTERSERVER_ACCOUNT:-} with additional parameters : ${@:-None}"
-./ManiaPlanetServer ${@} \
+echo "=> Starting server, login=${MASTERSERVER_ACCOUNT:-} with additional parameters :"
+echo "${@:-None}"
+
+./ManiaPlanetServer "${@}" \
     /nodaemon \
-    /forceip=${FORCE_IP_ADDRESS}:${SERVER_PORT} \
+    /forceip="${FORCE_IP_ADDRESS}":"${SERVER_PORT}" \
     /dedicated_cfg=${DEDICATED_CFG} \
     /game_settings=${MATCH_SETTINGS}
