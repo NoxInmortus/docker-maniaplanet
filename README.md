@@ -11,14 +11,14 @@ My goal is to be up-to-date and to be much more customisable.
 - Cleaner and more readable Dockerfile and entrypoint
 - Every `dedicated_cfg` option is customisable through environment variable
 
-Works great with https://git.tools01.imperium-gaming.fr/sysadmins/docker/docker-trackmania
+Works great with https://git.tools01.imperium-gaming.fr/sysadmins/docker/docker-maniacontrol
 
-Version 1.0
+Version 1.1
 
 ## Official NoxInmortus repositories
 
 Find more at :
-- https://git.tools01.imperium-gaming.fr/public
+- https://git.tools01.noxinmortus.fr/public
 - https://github.com/NoxInmortus?tab=repositories
 
 ## Available Architectures
@@ -124,3 +124,7 @@ Volume to mount is `/home/container` (Pterodactyl compliant) and contains all Tr
 - http://blog.zot24.com/tips-tricks-with-alpine-docker/
 - https://doc.maniaplanet.com/dedicated-server/getting-started
 - https://pterodactyl.io/community/config/eggs/creating_a_custom_image.html#creating-the-dockerfile
+
+Lint with :
+- https://github.com/hadolint/hadolint
+- https://github.com/koalaman/shellcheck
