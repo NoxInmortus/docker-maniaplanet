@@ -1,9 +1,10 @@
-#################################
-## Dockerfile Trackmania       ##
-## Imperium                    ##
-#################################
-FROM alpine:3.11
-LABEL maintainer='NoxInmortus (IMPERIUM)'
+#-----------------------------#
+# Dockerfile Trackmania       #
+# by NoxInmortus              #
+#-----------------------------#
+
+FROM alpine:3.12
+LABEL maintainer='NoxInmortus'
 
 ENV DEDICATED_URL="http://files.v04.maniaplanet.com/server/ManiaplanetServer_Latest.zip" \
     USER="container" \
@@ -29,7 +30,7 @@ RUN adduser -D -h ${WORKDIR} ${USER} && apk update \
     && chmod +x -v ${WORKDIR}/ManiaPlanetServer ${WORKDIR}/entrypoint.sh \
     && chown -R container: ${WORKDIR} \
     && apk del unzip libstdc++ \
-    && rm -rfv glibc-${GLIBC_VERSION}.apk *.bat *.exe *.html RemoteControlExamples \
+    && rm -rfv -- glibc-${GLIBC_VERSION}.apk *.bat *.exe *.html RemoteControlExamples \
     && rm -rfv /tmp/* /var/tmp/* /var/cache/apk/* \
     ;
 
