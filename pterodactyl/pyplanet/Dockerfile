@@ -14,5 +14,5 @@ USER container
 ENV  USER=container HOME=/home/container
 WORKDIR /home/container
 
-COPY /pterodactyl/pyplanet/entrypoint.sh /entrypoint.sh
+COPY ./pterodactyl/pyplanet/entrypoint.sh /entrypoint.sh
 CMD ["/bin/ash", "/entrypoint.sh"]
