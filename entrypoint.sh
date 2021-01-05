@@ -1,12 +1,12 @@
 #!/bin/sh
 
 # Make sure we use defaults everywhere.
-: "${TITLE:='TMStadium@nadeo'}"
-: "${TITLE_PACK_URL:='https://v4.live.maniaplanet.com/ingame/public/titles/download/TMStadium@nadeo.Title.Pack.gbx'}"
-: "${DEDICATED_CFG:='config.xml'}"
-: "${MATCH_SETTINGS:='MatchSettings/matchsettings.xml'}"
-: "${SERVER_NAME:='My Trackmania Server'}"
-: "${SERVER_PORT:='2350'}"
+: "${TITLE:=TMStadium@nadeo}"
+: "${TITLE_PACK_URL:=https://v4.live.maniaplanet.com/ingame/public/titles/download/TMStadium@nadeo.Title.Pack.gbx}"
+: "${DEDICATED_CFG:=config.xml}"
+: "${MATCH_SETTINGS:=MatchSettings/matchsettings.xml}"
+: "${SERVER_NAME:=My Trackmania Server}"
+: "${SERVER_PORT:=2350}"
 
 # We are required to get the public ip if we don't have it in our env currently.
 if [ -z ${FORCE_IP_ADDRESS+x} ]; then
