@@ -23,6 +23,7 @@ lint:
       - merge_requests
     changes:
       - Dockerfile
+      - entrypoint.sh
 
 lint-pterodactyl:
   stage: dbuild_validate
@@ -35,7 +36,8 @@ lint-pterodactyl:
       - master
       - merge_requests
     changes:
-      - Dockerfile
+      - pterodactyl/Dockerfile
+      - pterodactyl/entrypoint.sh
 
 dbuild_validate:
   stage: dbuild_validate
