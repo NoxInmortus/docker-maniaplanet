@@ -1,0 +1,1 @@
+# Maniaplanet + PyPlanet Pterodactyl egg
