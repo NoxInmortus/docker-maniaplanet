@@ -4,7 +4,7 @@
         "version": "PTDL_v1",
         "update_url": null
     },
-    "exported_at": "2021-01-06T12:48:53+02:00",
+    "exported_at": "2021-01-06T13:00:07+02:00",
     "name": "Maniaplanet + PyPlanet",
     "author": "me@noxinmortus.fr",
     "description": "Maniaplanet Trackmania Server.\r\nSee original repository : https:\/\/github.com\/NoxInmortus\/docker-trackmania\r\nPyPlanet version by treier57lol: https:\/\/github.com\/treier57lol\/docker-trackmania\/tree\/pyplanet",
@@ -17,7 +17,7 @@
         "files": "{}",
         "startup": "{\r\n    \"done\": \"...Play\",\r\n    \"userInteraction\": []\r\n}",
         "logs": "{}",
-        "stop": "^C &"
+        "stop": "^C"
     },
     "scripts": {
         "installation": {
