@@ -29,7 +29,7 @@ Find more at :
 ## Common Usage
 ```
 docker run --name=trackmania -d -v trackmania:/home/container --restart=unless-stopped \
-  -p 2350:2350 -p 2350:2350/udp -p 3450:3450 -p 3450:3450/udp
+  -p 2350:2350 -p 2350:2350/udp -p 3450:3450 -p 3450:3450/udp \
   -e MASTERSERVER_ACCOUNT='MyAccountName' \
   -e MASTERSERVER_ACCOUNT_PWD='P@55w0rd' \
   -e MASTERSERVER_KEY='yOuRkEy' \
@@ -38,7 +38,7 @@ docker run --name=trackmania -d -v trackmania:/home/container --restart=unless-s
   -e SERVER_NAME='Aw3s0meS3rV3r' \
   -e MAX_PLAYERS='16' \
   -e MAX_SPECTATORS='6' \
-  -e SERVER_PASSWORD='s0m371ng'
+  -e SERVER_PASSWORD='s0m371ng' \
  noxinmortus/docker-trackmania
 ```
 
