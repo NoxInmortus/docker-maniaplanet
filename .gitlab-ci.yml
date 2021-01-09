@@ -1,55 +1,101 @@
 stages:
-  - docker_build_validate
-  - docker_build_validate_pterodactyl
-  - docker_build_push
-  - docker_build_push_pterodactyl
+  - dbuild_validate
+  - dbuild_validate_pterodactyl
+  - dbuild_push
+  - dbuild_push_pterodactyl
+  - docker_pushrm
 
-before_script:
-  - DOCKERHUB='noxinmortus'
-
-docker_build_validate:
-  stage: docker_build_validate
+.build_template:
+  interruptible: true
+  retry: 1
   tags:
     - docker
+
+lint:
+  stage: dbuild_validate
+  extends: .build_template
   script:
-    - export DOCKER_CLI_EXPERIMENTAL=enabled
-    - docker buildx build -t ${DOCKERHUB}/${CI_PROJECT_NAME} --platform=linux/arm,linux/arm64,linux/amd64 .
+    - hadolint --config .hadolint.yml Dockerfile
+    - shellcheck -e SC2140 entrypoint.sh
   only:
-    - merge_requests
+    refs:
+      - master
+      - merge_requests
+    changes:
+      - Dockerfile
 
-docker_build_validate_pterodactyl:
-  stage: docker_build_validate_pterodactyl
-  tags:
-    - docker
+lint-pterodactyl:
+  stage: dbuild_validate
+  extends: .build_template
   script:
-    - export DOCKER_CLI_EXPERIMENTAL=enabled
-    - docker buildx build -t ${DOCKERHUB}/${CI_PROJECT_NAME}:pterodactyl --platform=linux/arm,linux/arm64,linux/amd64 pterodactyl/.
+    - hadolint --config .hadolint.yml pterodactyl/Dockerfile
+    - shellcheck -e SC2187 pterodactyl/entrypoint.sh
   only:
-    - merge_requests
+    refs:
+      - master
+      - merge_requests
+    changes:
+      - Dockerfile
 
+dbuild_validate:
+  stage: dbuild_validate
+  extends: .build_template
+  script:
+    - docker buildx build -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME} --platform=linux/arm,linux/arm64,linux/amd64 .
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - Dockerfile
+      - entrypoint.sh
 
-docker_build_push:
-  stage: docker_build_push
-  tags:
-    - docker
+dbuild_validate_pterodactyl:
+  stage: dbuild_validate_pterodactyl
+  extends: .build_template
+  script:
+    - docker buildx build -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME}:pterodactyl --platform=linux/arm,linux/arm64,linux/amd64 pterodactyl/.
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - pterodactyl/Dockerfile
+      - pterodactyl/entrypoint.sh
+
+dbuild_push:
+  stage: dbuild_push
+  extends: .build_template
   script:
     - VERSION=$(grep 'Version' README.md | awk -F ' ' '{ print $NF }')
-    - export DOCKER_CLI_EXPERIMENTAL=enabled
     - echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USER} --password-stdin
-    - docker buildx build -t ${DOCKERHUB}/${CI_PROJECT_NAME}:latest -t ${DOCKERHUB}/${CI_PROJECT_NAME}:${VERSION} --platform=linux/arm,linux/arm64,linux/amd64 . --push
-    - docker pushrm ${DOCKERHUB}/${CI_PROJECT_NAME}
+    - docker buildx build -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME}:latest -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME}:${VERSION} --platform=linux/arm,linux/arm64,linux/amd64 . --push
+    - docker pushrm ${DOCKERHUB_USER}/${CI_PROJECT_NAME}
   only:
     refs:
       - master
+    changes:
+      - Dockerfile
+      - entrypoint.sh
 
-docker_build_push_pterodactyl:
-  stage: docker_build_push_pterodactyl
-  tags:
-    - docker
+dbuild_push_pterodactyl:
+  stage: dbuild_push_pterodactyl
+  extends: .build_template
   script:
-    - export DOCKER_CLI_EXPERIMENTAL=enabled
     - echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USER} --password-stdin
-    - docker buildx build -t ${DOCKERHUB}/${CI_PROJECT_NAME}:pterodactyl --platform=linux/arm,linux/arm64,linux/amd64 pterodactyl/. --push
+    - docker buildx build -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME}:pterodactyl --platform=linux/arm,linux/arm64,linux/amd64 pterodactyl/. --push
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - pterodactyl/Dockerfile
+      - pterodactyl/entrypoint.sh
+
+docker_pushrm:
+  stage: docker_pushrm
+  extends: .build_template
+  script:
+    - docker pushrm ${DOCKERHUB_USER}/${CI_PROJECT_NAME}
   only:
     refs:
       - master
+    changes:
+      - README.md
