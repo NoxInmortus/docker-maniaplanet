@@ -10,14 +10,16 @@ My goal is to be up-to-date and to be much more customisable.
 - Multi architectures (see below)
 - Cleaner and more readable Dockerfile and entrypoint
 - Every `dedicated_cfg` option is customisable through environment variable
+- Pterodactyl compliant (https://github.com/pterodactyl/panel)
 
-Works great with https://git.tools01.imperium-gaming.fr/sysadmins/docker/docker-maniacontrol
+Works great with https://git.tools01.noxinmortus.fr/sysadmins/docker/docker-maniacontrol
 
-Version 1.1
+Version 1.1.1
 
 ## Official NoxInmortus repositories
 
 Find more at :
+- https://hub.docker.com/u/noxinmortus
 - https://git.tools01.noxinmortus.fr/public
 - https://github.com/NoxInmortus?tab=repositories
 
@@ -46,7 +48,7 @@ Once started, you can also manually edit the `config.xml` as it will not be over
 
 ## Configuration
 
-Volume to mount is `/home/container` (Pterodactyl compliant) and contains all Trackmania files.
+Volume to mount is `/home/container` (to be Pterodactyl compliant) and contains all Trackmania files.
 
 |Ports|Usage|
 |-|-|
