@@ -3,7 +3,7 @@
 # by NoxInmortus              #
 #-----------------------------#
 
-FROM alpine:3.12
+FROM alpine:3.13
 LABEL maintainer='NoxInmortus'
 
 ENV DEDICATED_URL="http://files.v04.maniaplanet.com/server/ManiaplanetServer_Latest.zip" \
