@@ -128,7 +128,7 @@ trap : EXIT TERM INT TERM QUIT WINCH
 echo "=> At $(pwd) | Starting server, login=${MASTERSERVER_ACCOUNT:-} with additional parameters :"
 echo "${@:-None}"
 
-${WORKDIR}/ManiaPlanetServer "${@}" \
+"${WORKDIR}"/ManiaPlanetServer "${@}" \
     /nodaemon \
     /forceip="${FORCE_IP_ADDRESS}":"${SERVER_PORT}" \
     /dedicated_cfg=${DEDICATED_CFG} \
