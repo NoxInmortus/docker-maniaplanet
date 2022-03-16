@@ -1,4 +1,4 @@
-# Docker-Trackmania
+# Docker-Maniaplanet
 
 This work is based on PyPlanet docker image (https://github.com/PyPlanet/maniaplanet-docker).
 
@@ -14,7 +14,7 @@ My goal is to be up-to-date and to be much more customisable.
 
 Works great with https://git.tools01.noxinmortus.fr/sysadmins/docker/docker-maniacontrol
 
-Version 1.1.1
+This image is rootless.
 
 ## Official NoxInmortus repositories
 
@@ -45,6 +45,22 @@ docker run --name=trackmania -d -v trackmania:/home/container --restart=unless-s
 ```
 
 Once started, you can also manually edit the `config.xml` as it will not be overwritten if the file exist. Same thing for the `matchsettings.xml`
+
+## User / Group Identifiers
+
+When using volumes (`-v` flags) permissions issues can arise between the host OS and the container, we avoid this issue by allowing you to specify the user `UID` and group `GID` :
+```
+-e UID=1000 # for UserID
+-e GID=1000 # for GroupID
+```
+
+Ensure any volume directories on the host are owned by the same user you specify and any permissions issues will vanish like magic.
+
+In this instance `UID=1000` and `GID=1000`, to find yours use `id user` as below:
+```
+  $ id username
+    uid=1000(dockeruser) gid=1000(dockergroup) groups=1000(dockergroup)
+```
 
 ## Configuration
 
