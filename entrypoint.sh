@@ -5,7 +5,7 @@
 : "${TITLE_PACK_URL:=https://v4.live.maniaplanet.com/ingame/public/titles/download/TMStadium@nadeo.Title.Pack.gbx}"
 : "${DEDICATED_CFG:=config.xml}"
 : "${MATCH_SETTINGS:=MatchSettings/matchsettings.xml}"
-: "${SERVER_NAME:=My Trackmania Server}"
+: "${SERVER_NAME:=My ManiaPlanet Server}"
 : "${SERVER_PORT:=2350}"
 
 # We are required to get the public ip if we don't have it in our env currently.
@@ -111,10 +111,10 @@ fi
 # Download title.
 if [ -z ${TITLE_PACK_FILE+x} ]; then
   echo "=> Downloading newest title version with no TITLE_PACK_FILE variable"
-  wget ${TITLE_PACK_URL} -qP ./UserData/Packs/
+  wget ${TITLE_PACK_URL} -nv -P "${WORKDIR}"/UserData/Packs/
 else
   echo "=> Downloading newest title version to ${TITLE_PACK_FILE}"
-  wget ${TITLE_PACK_URL} -qO ./UserData/Packs/"${TITLE_PACK_FILE}"
+  wget ${TITLE_PACK_URL} -nv -O "${WORKDIR}"/UserData/Packs/"${TITLE_PACK_FILE}"
 fi
 
 if [ -z ${MASTERSERVER_ACCOUNT+x} ]; then
@@ -125,7 +125,7 @@ fi
 trap : EXIT TERM INT TERM QUIT WINCH
 
 # Start dedicated.
-echo "=> Starting server, login=${MASTERSERVER_ACCOUNT:-} with additional parameters :"
+echo "=> At $(pwd) | Starting server, login=${MASTERSERVER_ACCOUNT:-} with additional parameters :"
 echo "${@:-None}"
 
 ./ManiaPlanetServer "${@}" \

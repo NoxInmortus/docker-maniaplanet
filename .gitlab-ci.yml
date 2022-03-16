@@ -1,9 +1,9 @@
 stages:
-  - dbuild_validate
-  - dbuild_validate_pterodactyl
-  - dbuild_push
-  - dbuild_push_pterodactyl
+  - lint
+  - dbuild
   - docker_pushrm
+  - tag
+  - changelog
 
 .build_template:
   interruptible: true
@@ -12,7 +12,7 @@ stages:
     - docker
 
 lint:
-  stage: dbuild_validate
+  stage: lint
   extends: .build_template
   script:
     - hadolint --config .hadolint.yml Dockerfile
@@ -26,7 +26,7 @@ lint:
       - entrypoint.sh
 
 lint-pterodactyl:
-  stage: dbuild_validate
+  stage: lint
   extends: .build_template
   script:
     - hadolint --config .hadolint.yml pterodactyl/Dockerfile
@@ -39,38 +39,12 @@ lint-pterodactyl:
       - pterodactyl/Dockerfile
       - pterodactyl/entrypoint.sh
 
-dbuild_validate:
-  stage: dbuild_validate
+dbuild:
+  stage: dbuild
   extends: .build_template
   script:
-    - docker buildx build -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME} --platform=linux/arm,linux/arm64,linux/amd64 .
-  only:
-    refs:
-      - merge_requests
-    changes:
-      - Dockerfile
-      - entrypoint.sh
-
-dbuild_validate_pterodactyl:
-  stage: dbuild_validate_pterodactyl
-  extends: .build_template
-  script:
-    - docker buildx build -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME}:pterodactyl --platform=linux/arm,linux/arm64,linux/amd64 pterodactyl/.
-  only:
-    refs:
-      - merge_requests
-    changes:
-      - pterodactyl/Dockerfile
-      - pterodactyl/entrypoint.sh
-
-dbuild_push:
-  stage: dbuild_push
-  extends: .build_template
-  script:
-    - VERSION=$(grep 'Version' README.md | awk -F ' ' '{ print $NF }')
     - echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USER} --password-stdin
-    - docker buildx build -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME}:latest -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME}:${VERSION} --platform=linux/arm,linux/arm64,linux/amd64 . --push
-    - docker pushrm ${DOCKERHUB_USER}/${CI_PROJECT_NAME}
+    - docker buildx build -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME}:latest -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME}:${CI_COMMIT_SHORT_SHA} --platform=linux/arm,linux/arm64,linux/amd64 . --push
   only:
     refs:
       - master
@@ -78,15 +52,15 @@ dbuild_push:
       - Dockerfile
       - entrypoint.sh
 
-dbuild_push_pterodactyl:
-  stage: dbuild_push_pterodactyl
+dbuild_pterodactyl:
+  stage: dbuild
   extends: .build_template
   script:
     - echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USER} --password-stdin
-    - docker buildx build -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME}:pterodactyl --platform=linux/arm,linux/arm64,linux/amd64 pterodactyl/. --push
+    - docker buildx build -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME}:pterodactyl -t ${DOCKERHUB_USER}/${CI_PROJECT_NAME}:pterodactyl-${CI_COMMIT_SHORT_SHA} --platform=linux/arm,linux/arm64,linux/amd64 pterodactyl/. --push
   only:
     refs:
-      - merge_requests
+      - master
     changes:
       - pterodactyl/Dockerfile
       - pterodactyl/entrypoint.sh
@@ -95,9 +69,23 @@ docker_pushrm:
   stage: docker_pushrm
   extends: .build_template
   script:
+    - echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USER} --password-stdin
     - docker pushrm ${DOCKERHUB_USER}/${CI_PROJECT_NAME}
   only:
     refs:
       - master
     changes:
       - README.md
+
+include:
+  - project: 'sysadmins/templates-ci'
+    ref: master
+    file:
+      - 'create_tag_version_script.yml'
+      - 'create_changelog.yml'
+    interruptible: true
+    tags:
+      - ansible-ci
+    only:
+      refs:
+        - master

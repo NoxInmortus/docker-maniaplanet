@@ -1,4 +1,4 @@
-# Docker-Trackmania
+# Docker-Maniaplanet
 
 This work is based on PyPlanet docker image (https://github.com/PyPlanet/maniaplanet-docker).
 
@@ -14,7 +14,7 @@ My goal is to be up-to-date and to be much more customisable.
 
 Works great with https://git.tools01.noxinmortus.fr/sysadmins/docker/docker-maniacontrol
 
-Version 1.1.1
+This image is rootless.
 
 ## Official NoxInmortus repositories
 
@@ -30,7 +30,7 @@ Find more at :
 
 ## Common Usage
 ```
-docker run --name=trackmania -d -v trackmania:/home/container --restart=unless-stopped \
+docker run --name=maniaplanet -d -v maniaplanet:/home/container --restart=unless-stopped \
   -p 2350:2350 -p 2350:2350/udp -p 3450:3450 -p 3450:3450/udp \
   -e MASTERSERVER_ACCOUNT='MyAccountName' \
   -e MASTERSERVER_ACCOUNT_PWD='P@55w0rd' \
@@ -41,14 +41,30 @@ docker run --name=trackmania -d -v trackmania:/home/container --restart=unless-s
   -e MAX_PLAYERS='16' \
   -e MAX_SPECTATORS='6' \
   -e SERVER_PASSWORD='s0m371ng' \
- noxinmortus/docker-trackmania
+ noxinmortus/docker-maniaplanet
 ```
 
 Once started, you can also manually edit the `config.xml` as it will not be overwritten if the file exist. Same thing for the `matchsettings.xml`
 
+## User / Group Identifiers
+
+When using volumes (`-v` flags) permissions issues can arise between the host OS and the container, we avoid this issue by allowing you to specify the user `UID` and group `GID` :
+```
+-e UID=1000 # for UserID
+-e GID=1000 # for GroupID
+```
+
+Ensure any volume directories on the host are owned by the same user you specify and any permissions issues will vanish like magic.
+
+In this instance `UID=1000` and `GID=1000`, to find yours use `id user` as below:
+```
+  $ id username
+    uid=1000(dockeruser) gid=1000(dockergroup) groups=1000(dockergroup)
+```
+
 ## Configuration
 
-Volume to mount is `/home/container` (to be Pterodactyl compliant) and contains all Trackmania files.
+Volume to mount is `/home/container` (to be Pterodactyl compliant) and contains all maniaplanet files.
 
 |Ports|Usage|
 |-|-|
@@ -77,7 +93,7 @@ Volume to mount is `/home/container` (to be Pterodactyl compliant) and contains 
 |SUPERADMIN_PWD|`SuperAdmin`||
 |ADMIN_NAME|`Admin`||
 |ADMIN_PWD|`Admin`||
-|SERVER_NAME|`My Trackmania Server`||
+|SERVER_NAME|`My maniaplanet Server`||
 |COMMENT|None||
 |HIDE_SERVER|`0`|value is 0 (always shown), 1 (always hidden), 2 (hidden from nations)|
 |MAX_PLAYERS|`32`||

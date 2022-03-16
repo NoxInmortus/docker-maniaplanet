@@ -1,0 +1,144 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v1"
+    },
+    "exported_at": "2021-01-05T17:01:34+01:00",
+    "name": "ManiaPlanet",
+    "author": "me@noxinmortus.fr",
+    "description": "Maniaplanet Server.\r\nSee original repository : https:\/\/github.com\/NoxInmortus\/docker-maniaplanet",
+    "image": "noxinmortus\/docker-maniaplanet:pterodactyl",
+    "startup": ".\/ManiaPlanetServer \/nodaemon  \/forceip={{FORCE_IP_ADDRESS}}:{{TM_SERVER_PORT}} \/dedicated_cfg={{DEDICATED_CFG}} \/game_settings={{MATCH_SETTINGS}}",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"...Play\",\r\n    \"userInteraction\": []\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/sh -x\r\n# ManiaPlanet Installation Script\r\n#\r\n## Vars\r\nDEDICATED_URL=\"http:\/\/files.v04.maniaplanet.com\/server\/ManiaplanetServer_Latest.zip\"\r\nDEFAULT_MAP=\"https:\/\/github.com\/NoxInmortus\/docker-maniaplanet\/raw\/master\/files\/stadium_map.Map.gbx\"\r\nUSER=\"container\"\r\nWORKDIR=\"\/mnt\/server\"\r\n\r\nmkdir -pv ${WORKDIR}\r\ncd ${WORKDIR}\r\n\r\n## Install\r\napk update && apk add --no-cache unzip wget ca-certificates\r\nwget -v --no-check-certificate ${DEDICATED_URL} -O dedicated.zip\r\nunzip -uo dedicated.zip -d ${WORKDIR}\r\nchmod +x -v ${WORKDIR}\/ManiaPlanetServer\r\nchown -Rv 1000:1000 ${WORKDIR}\r\n\r\n## Cleanup\r\nrm -rfv *.apk *.bat *.exe *.html RemoteControlExamples UserData\/Config\/dedicated_cfg.default.txt\r\nrm -rfv \/tmp\/* \/var\/tmp\/* \/var\/cache\/apk\/* dedicated.zip\r\n\r\n## Configuration\r\n# Make sure we use defaults everywhere.\r\n: \"${TITLE:=TMStadium@nadeo}\"\r\n: \"${TITLE_PACK_URL:=https:\/\/v4.live.maniaplanet.com\/ingame\/public\/titles\/download\/TMStadium@nadeo.Title.Pack.gbx}\"\r\n: \"${DEDICATED_CFG:=config.txt}\"\r\n: \"${MATCH_SETTINGS:=MatchSettings\/matchsettings.xml}\"\r\n: \"${SERVER_NAME:=My maniaplanet Server}\"\r\n: \"${SERVER_PORT:=2350}\"\r\n\r\n# Default map\r\nwget -qO  ${WORKDIR}\/UserData\/Maps\/stadium_map.Map.gbx ${DEFAULT_MAP}\r\n\r\n# Copy the configuration files if not yet copied.\r\nmkdir -pv ${WORKDIR}\/GameData ${WORKDIR}\/UserData\/Config ${WORKDIR}\/UserData\/Packs ${WORKDIR}\/UserData\/Maps\/MatchSettings\r\n## {{{ config.txt\r\nif [ ! -f ${WORKDIR}\/UserData\/Config\/${DEDICATED_CFG} ]; then\r\necho \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\r\n<dedicated>\r\n\t<authorization_levels>\r\n\t\t<level>\r\n\t\t\t<name>${SUPERADMIN_NAME:-SuperAdmin}<\/name>\r\n\t\t\t<password>${SUPERADMIN_PWD:-SuperAdmin}<\/password>\r\n\t\t<\/level>\r\n\t\t<level>\r\n\t\t\t<name>${ADMIN_NAME:-Admin}<\/name>\r\n\t\t\t<password>${ADMIN_PWD:-Admin}<\/password>\r\n\t\t<\/level>\r\n\t<\/authorization_levels>\r\n\r\n \t<masterserver_account>\r\n\t\t<login>${MASTERSERVER_ACCOUNT:-}<\/login>\r\n\t\t<password>${MASTERSERVER_ACCOUNT_PWD:-}<\/password>\r\n\t\t<validation_key>${MASTERSERVER_KEY:-}<\/validation_key>\r\n\t<\/masterserver_account>\r\n\r\n\t<server_options>\r\n\t\t<name>${SERVER_NAME:-}<\/name>\r\n\t\t<comment>\r\n\t\t\t${COMMENT:-}\r\n\t\t<\/comment>\r\n\t\t<hide_server>${HIDE_SERVER:-0}<\/hide_server>\r\n\t\t<max_players>${MAX_PLAYERS:-32}<\/max_players>\r\n\t\t<password>${SERVER_PASSWORD:-}<\/password>\r\n\t\t<max_spectators>${MAX_SPECTATORS:-32}<\/max_spectators>\r\n\t\t<password_spectator>${PASSWORD_SPECTATOR:-}<\/password_spectator>\r\n\t\t<keep_player_slots>${KEEP_PLAYER_SLOTS:-False}<\/keep_player_slots>\r\n\t\t<ladder_mode>${LADDER_MODE:-forced}<\/ladder_mode>\r\n\t\t<enable_p2p_upload>${P2P_UPLOAD:-True}<\/enable_p2p_upload>\r\n\t\t<enable_p2p_download>${P2P_DOWNLOAD:-False}<\/enable_p2p_download>\r\n\t\t<callvote_timeout>${CALLVOTE_TIMEOUT:-60000}<\/callvote_timeout>\r\n\t\t<callvote_ratio>${CALLVOTE_RATIO:-0.5}<\/callvote_ratio>\r\n\t\t<callvote_ratios>\r\n\t\t\t<voteratio command=\\\"Ban\\\" ratio=\"-1\"\/>\r\n\t\t\t<!-- commands can be \\\"Ban\\\", \\\"Kick\\\", \\\"RestartMap\\\", \\\"NextMap\\\", \\\"SetModeScriptSettingsAndCommands\\\"... -->\r\n\t\t<\/callvote_ratios>\r\n\t\t<allow_map_download>${ALLOW_MAP_DOWNLOAD:-True}<\/allow_map_download>\r\n\t\t<autosave_replays>${AUTOSAVE_REPLAYS:-False}<\/autosave_replays>\r\n\t\t<autosave_validation_replays>${AUTOSAVE_VALIDATION_REPLAYS:-False}<\/autosave_validation_replays>\r\n\t\t<referee_password>${REFEREE_PASSWORD:-}<\/referee_password>\r\n\t\t<referee_validation_mode>${REFEREE_VALIDATION_MODE:-0}<\/referee_validation_mode>\r\n\t\t<use_changing_validation_seed>${USE_CHANGING_VALIDATION_SEED:-False}<\/use_changing_validation_seed>\r\n\t\t<disable_horns>${DISABLE_HORNS:-False}<\/disable_horns>\r\n\t\t<clientinputs_maxlatency>${MAX_LATENCY:-0}<\/clientinputs_maxlatency>\r\n\t\t<ladder_serverlimit_min>${LADDER_SERVERLIMIT_MIN:-}<\/ladder_serverlimit_min>\r\n\t\t<ladder_serverlimit_max>${LADDER_SERVERLIMIT_MAX:-}<\/ladder_serverlimit_max>\r\n\t<\/server_options>\r\n\r\n\t<system_config>\r\n\t\t<connection_uploadrate>${CONN_UPLOAD_RATE:-8000}<\/connection_uploadrate>\r\n\t\t<connection_downloadrate>${CONN_DOWNLOAD_RATE:-8000}<\/connection_downloadrate>\r\n\t\t<allow_spectator_relays>${ALLOW_SPECTATOR_RELAYS:-False}<\/allow_spectator_relays>\r\n\t\t<p2p_cache_size>${P2P_CACHE_SIZE:-600}<\/p2p_cache_size>\r\n\t\t<force_ip_address>${FORCE_IP_ADDRESS:-}<\/force_ip_address>\r\n\t\t<server_port>${TM_SERVER_PORT:-2350}<\/server_port>\r\n\t\t<server_p2p_port>${SERVER_P2P_PORT:-3450}<\/server_p2p_port>\r\n\t\t<client_port>${CLIENT_PORT:-0}<\/client_port>\r\n\t\t<bind_ip_address>${BIND_IP_ADDRESS:-}<\/bind_ip_address>\r\n\t\t<use_nat_upnp>${USE_NAT_UPNP:-}<\/use_nat_upnp>\r\n\t\t<gsp_name>${GSP_NAME:-}<\/gsp_name>\r\n\t\t<gsp_url>${GSP_URL:-}<\/gsp_url>\r\n\t\t<xmlrpc_port>${XMLRPC_PORT:-5000}<\/xmlrpc_port>\r\n\t\t<xmlrpc_allowremote>${XMLRPC_ALLOW_REMOTE:-True}<\/xmlrpc_allowremote>\r\n\t\t<scriptcloud_source>${SCRIPTCLOUD_SOURCE:-nadeocloud}<\/scriptcloud_source>\r\n\t\t<blacklist_url>${BLACKLIST_URL:-}<\/blacklist_url>\r\n\t\t<guestlist_filename>${GUESTLIST_FILENAME:-}<\/guestlist_filename>\r\n\t\t<blacklist_filename>${BLACKLIST_FILENAME:-}<\/blacklist_filename>\r\n\t\t<title>${TITLE:-TMStadium@nadeo}<\/title>\r\n\t\t<minimum_client_build>${MIN_CLIENT_BUILD:-}<\/minimum_client_build>\r\n\t\t<disable_coherence_checks>${DISABLE_COHERENCE_CHECKS:-False}<\/disable_coherence_checks>\r\n\t\t<disable_replay_recording>${DISABLE_REPLAY_RECORDING:-False}<\/disable_replay_recording>\r\n\t\t<save_all_individual_runs>${SAVE_ALL_INDIVIDUAL_RUNS:-False}<\/save_all_individual_runs>\r\n\t\t<use_proxy>${USE_PROXY:-False}<\/use_proxy>\r\n\t\t<proxy_login>${PROXY_LOGIN:-}<\/proxy_login>\r\n\t\t<proxy_password>${PROXY_PWD:-}<\/proxy_password>\r\n\t<\/system_config>\r\n<\/dedicated>\r\n\" > ${WORKDIR}\/UserData\/Config\/${DEDICATED_CFG}\r\nfi\r\n## config.txt }}}\r\n## {{{ matchsettings.txt\r\nif [ ! -f ${WORKDIR}\/UserData\/Maps\/${MATCH_SETTINGS} ]; then\r\necho \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\r\n<playlist>\r\n    <gameinfos>\r\n        <game_mode>0<\/game_mode>\r\n        <chat_time>10000<\/chat_time>\r\n        <finishtimeout>1<\/finishtimeout>\r\n        <allwarmupduration>0<\/allwarmupduration>\r\n        <disablerespawn>0<\/disablerespawn>\r\n        <forceshowallopponents>0<\/forceshowallopponents>\r\n        <script_name>TimeAttack.Script.txt<\/script_name>\r\n        <rounds_pointslimit>50<\/rounds_pointslimit>\r\n        <rounds_usenewrules>0<\/rounds_usenewrules>\r\n        <rounds_forcedlaps>0<\/rounds_forcedlaps>\r\n        <rounds_pointslimitnewrules>5<\/rounds_pointslimitnewrules>\r\n        <team_pointslimit>5<\/team_pointslimit>\r\n        <team_maxpoints>6<\/team_maxpoints>\r\n        <team_usenewrules>0<\/team_usenewrules>\r\n        <team_pointslimitnewrules>5<\/team_pointslimitnewrules>\r\n        <timeattack_limit>300000<\/timeattack_limit>\r\n        <timeattack_synchstartperiod>0<\/timeattack_synchstartperiod>\r\n        <laps_nblaps>5<\/laps_nblaps>\r\n        <laps_timelimit>0<\/laps_timelimit>\r\n        <cup_pointslimit>100<\/cup_pointslimit>\r\n        <cup_roundsperchallenge>5<\/cup_roundsperchallenge>\r\n        <cup_nbwinners>3<\/cup_nbwinners>\r\n        <cup_warmupduration>2<\/cup_warmupduration>\r\n    <\/gameinfos>\r\n\r\n    <hotseat>\r\n        <game_mode>0<\/game_mode>\r\n        <time_limit>300000<\/time_limit>\r\n        <rounds_count>5<\/rounds_count>\r\n    <\/hotseat>\r\n\r\n    <filter>\r\n        <is_lan>1<\/is_lan>\r\n        <is_internet>1<\/is_internet>\r\n        <is_solo>0<\/is_solo>\r\n        <is_hotseat>0<\/is_hotseat>\r\n        <sort_index>1000<\/sort_index>\r\n        <random_map_order>0<\/random_map_order>\r\n    <\/filter>\r\n\r\n    <startindex>0<\/startindex>\r\n    <map>\r\n        <file>stadium_map.Map.gbx<\/file>\r\n    <\/map>\r\n<\/playlist>\r\n\" > ${WORKDIR}\/UserData\/Maps\/${MATCH_SETTINGS}\r\nfi\r\n## matchsettings.txt }}}\r\n\r\n# Download title.\r\nif [ -z ${TITLE_PACK_FILE+x} ]; then\r\n  echo \"=> Downloading newest title version with no TITLE_PACK_FILE variable\"\r\n  wget ${TITLE_PACK_URL} -qP .\/UserData\/Packs\/\r\nelse\r\n  echo \"=> Downloading newest title version to ${TITLE_PACK_FILE}\"\r\n  wget ${TITLE_PACK_URL} -qO .\/UserData\/Packs\/${TITLE_PACK_FILE}\r\nfi",
+            "container": "alpine:3.12",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "MASTERSERVER_ACCOUNT",
+            "description": "Maniaplanet Login",
+            "env_variable": "MASTERSERVER_ACCOUNT",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string"
+        },
+        {
+            "name": "MASTERSERVER_ACCOUNT_PWD",
+            "description": "Maniaplanet Password",
+            "env_variable": "MASTERSERVER_ACCOUNT_PWD",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string"
+        },
+        {
+            "name": "MASTERSERVER_KEY",
+            "description": "Master server key",
+            "env_variable": "MASTERSERVER_KEY",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string"
+        },
+        {
+            "name": "SERVER_NAME",
+            "description": "maniaplanet server name",
+            "env_variable": "SERVER_NAME",
+            "default_value": "MymaniaplanetServer",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string"
+        },
+        {
+            "name": "MAX_PLAYERS",
+            "description": "Max players value",
+            "env_variable": "MAX_PLAYERS",
+            "default_value": "32",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|int|max:64"
+        },
+        {
+            "name": "FORCE_IP_ADDRESS",
+            "description": "Public IPv4 of the server",
+            "env_variable": "FORCE_IP_ADDRESS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|ipv4"
+        },
+        {
+            "name": "TM_SERVER_PORT",
+            "description": "maniaplanet Server Port",
+            "env_variable": "TM_SERVER_PORT",
+            "default_value": "2350",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|int"
+        },
+        {
+            "name": "DEDICATED_CFG",
+            "description": "Dedicated config file",
+            "env_variable": "DEDICATED_CFG",
+            "default_value": "config.txt",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string"
+        },
+        {
+            "name": "MATCH_SETTINGS",
+            "description": "Match settings config file",
+            "env_variable": "MATCH_SETTINGS",
+            "default_value": "MatchSettings\/matchsettings.txt",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string"
+        },
+        {
+            "name": "SUPERADMIN_PWD",
+            "description": "SuperAdmin password",
+            "env_variable": "SUPERADMIN_PWD",
+            "default_value": "SuperAdmin",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string"
+        },
+        {
+            "name": "ADMIN_PWD",
+            "description": "Admin password",
+            "env_variable": "ADMIN_PWD",
+            "default_value": "Admin",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string"
+        },
+        {
+            "name": "GSP_NAME",
+            "description": "Game server provider name",
+            "env_variable": "GSP_NAME",
+            "default_value": "Pterodactyl",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string"
+        },
+        {
+            "name": "GSP_URL",
+            "description": "Game server provider URL",
+            "env_variable": "GSP_URL",
+            "default_value": "https:\/\/pterodactyl.io\/",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string"
+        }
+    ]
+}
