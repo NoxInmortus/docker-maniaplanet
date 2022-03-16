@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="1.2.2"></a>
+## [1.2.2] - 2022-03-16
+### Fixed
+- Entrypoint incorrect
+
+
 <a name="1.2.1"></a>
 ## [1.2.1] - 2022-03-16
 ### Fixed
@@ -27,6 +33,7 @@
 - LICENCE & README
 
 
-[Unreleased]: https://git.tools01.noxinmortus.fr/sysadmins/ansible/role-zabbix/compare/1.2.1...HEAD
+[Unreleased]: https://git.tools01.noxinmortus.fr/sysadmins/ansible/role-zabbix/compare/1.2.2...HEAD
+[1.2.2]: https://git.tools01.noxinmortus.fr/sysadmins/ansible/role-zabbix/compare/1.2.1...1.2.2
 [1.2.1]: https://git.tools01.noxinmortus.fr/sysadmins/ansible/role-zabbix/compare/1.2.0...1.2.1
 [1.2.0]: https://git.tools01.noxinmortus.fr/sysadmins/ansible/role-zabbix/compare/1.1.0...1.2.0
