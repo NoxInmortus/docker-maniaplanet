@@ -14,7 +14,6 @@ ENV DEDICATED_URL='http://files.v04.maniaplanet.com/server/ManiaplanetServer_Lat
     TEMPLATE_DIR='/home/container-config' \
     LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/:/lib/" \
     GLIBC_VERSION='2.35-r0'
-WORKDIR ${WORKDIR}
 
 COPY entrypoint.sh update-perms.sh files/ /
 
@@ -39,7 +38,8 @@ RUN addgroup --gid ${GID} ${USER} \
     ;
 
 EXPOSE 2350 2350/udp 3450 3450/udp 5000
+WORKDIR ${WORKDIR}
 VOLUME ${WORKDIR}
 CMD ["/update-perms.sh"]
 USER ${USER}
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["${WORKDIR}/entrypoint.sh"]

@@ -125,10 +125,10 @@ fi
 trap : EXIT TERM INT TERM QUIT WINCH
 
 # Start dedicated.
-echo "=> Starting server, login=${MASTERSERVER_ACCOUNT:-} with additional parameters :"
+echo "=> At $(pwd) | Starting server, login=${MASTERSERVER_ACCOUNT:-} with additional parameters :"
 echo "${@:-None}"
 
-./ManiaPlanetServer "${@}" \
+${WORKDIR}/ManiaPlanetServer "${@}" \
     /nodaemon \
     /forceip="${FORCE_IP_ADDRESS}":"${SERVER_PORT}" \
     /dedicated_cfg=${DEDICATED_CFG} \
