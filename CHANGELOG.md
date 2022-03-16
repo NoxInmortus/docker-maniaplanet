@@ -2,6 +2,9 @@
 ## [Unreleased]
 
 
+<a name="1.2.0"></a>
+## [1.2.0] - 2022-03-16
+
 <a name="1.1.0"></a>
 ## 1.1.0 - 2022-03-16
 ### Added
@@ -18,4 +21,5 @@
 - LICENCE & README
 
 
-[Unreleased]: https://git.tools01.noxinmortus.fr/sysadmins/ansible/role-zabbix/compare/1.1.0...HEAD
+[Unreleased]: https://git.tools01.noxinmortus.fr/sysadmins/ansible/role-zabbix/compare/1.2.0...HEAD
+[1.2.0]: https://git.tools01.noxinmortus.fr/sysadmins/ansible/role-zabbix/compare/1.1.0...1.2.0
