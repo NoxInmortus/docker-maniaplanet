@@ -42,4 +42,4 @@ EXPOSE 2350 2350/udp 3450 3450/udp 5000
 VOLUME ${WORKDIR}
 CMD ["/update-perms.sh"]
 USER ${USER}
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
