@@ -3,7 +3,7 @@
 # Environment: glibc + libuuid
 # Minimum Panel Version: 0.6.0
 # ----------------------------------
-FROM frolvlad/alpine-glibc:alpine-3.12
+FROM frolvlad/alpine-glibc:alpine-3.15_glibc-2.34
 
 LABEL maintainer='NoxInmortus'
 
