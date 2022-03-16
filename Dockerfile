@@ -1,5 +1,5 @@
 #-----------------------------#
-# Dockerfile Trackmania       #
+# Dockerfile ManiaPlanet      #
 # by NoxInmortus              #
 #-----------------------------#
 

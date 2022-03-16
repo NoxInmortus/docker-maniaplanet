@@ -30,7 +30,7 @@ Find more at :
 
 ## Common Usage
 ```
-docker run --name=trackmania -d -v trackmania:/home/container --restart=unless-stopped \
+docker run --name=maniaplanet -d -v maniaplanet:/home/container --restart=unless-stopped \
   -p 2350:2350 -p 2350:2350/udp -p 3450:3450 -p 3450:3450/udp \
   -e MASTERSERVER_ACCOUNT='MyAccountName' \
   -e MASTERSERVER_ACCOUNT_PWD='P@55w0rd' \
@@ -41,7 +41,7 @@ docker run --name=trackmania -d -v trackmania:/home/container --restart=unless-s
   -e MAX_PLAYERS='16' \
   -e MAX_SPECTATORS='6' \
   -e SERVER_PASSWORD='s0m371ng' \
- noxinmortus/docker-trackmania
+ noxinmortus/docker-maniaplanet
 ```
 
 Once started, you can also manually edit the `config.xml` as it will not be overwritten if the file exist. Same thing for the `matchsettings.xml`
@@ -64,7 +64,7 @@ In this instance `UID=1000` and `GID=1000`, to find yours use `id user` as below
 
 ## Configuration
 
-Volume to mount is `/home/container` (to be Pterodactyl compliant) and contains all Trackmania files.
+Volume to mount is `/home/container` (to be Pterodactyl compliant) and contains all maniaplanet files.
 
 |Ports|Usage|
 |-|-|
@@ -93,7 +93,7 @@ Volume to mount is `/home/container` (to be Pterodactyl compliant) and contains 
 |SUPERADMIN_PWD|`SuperAdmin`||
 |ADMIN_NAME|`Admin`||
 |ADMIN_PWD|`Admin`||
-|SERVER_NAME|`My Trackmania Server`||
+|SERVER_NAME|`My maniaplanet Server`||
 |COMMENT|None||
 |HIDE_SERVER|`0`|value is 0 (always shown), 1 (always hidden), 2 (hidden from nations)|
 |MAX_PLAYERS|`32`||
