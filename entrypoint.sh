@@ -108,11 +108,13 @@ if [ ! -f "${WORKDIR}"/UserData/Maps/stadium_map.Map.gbx ]; then
     cp -v "${TEMPLATE_DIR}"/stadium_map.Map.gbx "${WORKDIR}"/UserData/Maps/stadium_map.Map.gbx
 fi
 
-# Download title.
+# Build TITLE_PACK_FILE variable if it does not exist from TITLE_PACK_URL
 if [ -z ${TITLE_PACK_FILE+x} ]; then
-  echo "=> Downloading newest title version with no TITLE_PACK_FILE variable"
-  wget ${TITLE_PACK_URL} -nv -P "${WORKDIR}"/UserData/Packs/
-else
+  TITLE_PACK_FILE="$(echo "${TITLE_PACK_URL}" | awk -F'/' '{ print $NF }')"
+fi
+
+# Download TITLE_PACK_URL if it does not already exist
+if [ ! -f "${WORKDIR}"/UserData/Packs/"${TITLE_PACK_FILE}" ]; then
   echo "=> Downloading newest title version to ${TITLE_PACK_FILE}"
   wget ${TITLE_PACK_URL} -nv -O "${WORKDIR}"/UserData/Packs/"${TITLE_PACK_FILE}"
 fi
